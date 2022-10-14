@@ -28,7 +28,7 @@
 # - ``utils.py`` contains helper functions for this assignment. You do not need to modify code in this file.
 # 
 
-# In[ ]:
+# In[2]:
 
 
 import numpy as np
@@ -57,7 +57,7 @@ get_ipython().run_line_magic('matplotlib', 'inline')
 #   - `y_train` is the profit of a restaurant in that city. A negative value for profit indicates a loss.   
 #   - Both `X_train` and `y_train` are numpy arrays.
 
-# In[ ]:
+# In[3]:
 
 
 # load the dataset
@@ -70,7 +70,7 @@ x_train, y_train = load_data()
 # 
 # The code below prints the variable `x_train` and the type of the variable.
 
-# In[ ]:
+# In[4]:
 
 
 # print x_train
@@ -84,7 +84,7 @@ print("First five elements of x_train are:\n", x_train[:5])
 #   
 # Now, let's print `y_train`
 
-# In[ ]:
+# In[5]:
 
 
 # print y_train
@@ -103,12 +103,13 @@ print("First five elements of y_train are:\n", y_train[:5])
 # 
 # Please print the shape of `x_train` and `y_train` and see how many training examples you have in your dataset.
 
-# In[ ]:
+# In[6]:
 
 
 print ('The shape of x_train is:', x_train.shape)
 print ('The shape of y_train is: ', y_train.shape)
 print ('Number of training examples (m):', len(x_train))
+print ('Number of training examples (m):', len(y_train))
 
 
 # The city population array has 97 data points, and the monthly average profits also has 97 data points. These are NumPy 1D arrays.
@@ -120,7 +121,7 @@ print ('Number of training examples (m):', len(x_train))
 # - Many other problems that you will encounter in real life have more than two properties (for example, population, average household income, monthly profits, monthly sales).When you have more than two properties, you can still use a scatter plot to see the relationship between each pair of properties.
 # 
 
-# In[ ]:
+# In[7]:
 
 
 # Create a scatter plot of the data. To change the markers to red "x",
@@ -208,7 +209,7 @@ plt.show()
 # 
 # If you get stuck, you can check out the hints presented after the cell below to help you with the implementation.
 
-# In[ ]:
+# In[9]:
 
 
 # UNQ_C1
@@ -235,6 +236,13 @@ def compute_cost(x, y, w, b):
     
     ### START CODE HERE ###  
     
+    cost_sum = 0 
+    for i in range(m): 
+        f_wb = w*x[i] + b
+        cost_sum += (f_wb - y[i])**2
+    
+    total_cost = (1/(2*m))*cost_sum
+        
     ### END CODE HERE ### 
 
     return total_cost
@@ -317,7 +325,7 @@ def compute_cost(x, y, w, b):
 
 # You can check if your implementation was correct by running the following test code:
 
-# In[ ]:
+# In[11]:
 
 
 # Compute cost with some initial values for paramaters w, b
@@ -397,7 +405,7 @@ compute_cost_test(compute_cost)
 # 
 # If you get stuck, you can check out the hints presented after the cell below to help you with the implementation.
 
-# In[ ]:
+# In[20]:
 
 
 # UNQ_C2
@@ -422,6 +430,20 @@ def compute_gradient(x, y, w, b):
     dj_db = 0
     
     ### START CODE HERE ### 
+    
+    dj_dwi = 0
+    dj_dbi = 0
+    
+    for i in range(m):
+        f_wb = x[i]*w + b 
+        dj_dbi = f_wb - y[i]
+        dj_dwi = (f_wb - y[i])*x[i]
+        dj_dw += dj_dwi
+        dj_db += dj_dbi
+    dj_dw = dj_dw/m
+    dj_db = dj_db/m
+    
+    
     
     ### END CODE HERE ### 
         
@@ -525,7 +547,7 @@ def compute_gradient(x, y, w, b):
 
 # Run the cells below to check your implementation of the `compute_gradient` function with two different initializations of the parameters $w$,$b$.
 
-# In[ ]:
+# In[21]:
 
 
 # Compute and display gradient with w initialized to zeroes
@@ -548,7 +570,7 @@ compute_gradient_test(compute_gradient)
 #   </tr>
 # </table>
 
-# In[ ]:
+# In[22]:
 
 
 # Compute and display cost and gradient with non-zero w
@@ -578,7 +600,7 @@ print('Gradient at test w, b:', tmp_dj_dw, tmp_dj_db)
 # 
 # - Assuming you have implemented the gradient and computed the cost correctly and you have an appropriate value for the learning rate alpha, $J(w,b)$ should never increase and should converge to a steady value by the end of the algorithm.
 
-# In[ ]:
+# In[23]:
 
 
 def gradient_descent(x, y, w_in, b_in, cost_function, gradient_function, alpha, num_iters): 
@@ -634,7 +656,7 @@ def gradient_descent(x, y, w_in, b_in, cost_function, gradient_function, alpha, 
 
 # Now let's run the gradient descent algorithm above to learn the parameters for our dataset.
 
-# In[ ]:
+# In[24]:
 
 
 # initialize fitting parameters. Recall that the shape of w is (n,)
@@ -664,7 +686,7 @@ print("w,b found by gradient descent:", w, b)
 # 
 # To calculate the predictions on the entire dataset, we can loop through all the training examples and calculate the prediction for each example. This is shown in the code block below.
 
-# In[ ]:
+# In[25]:
 
 
 m = x_train.shape[0]
@@ -676,7 +698,7 @@ for i in range(m):
 
 # We will now plot the predicted values to see the linear fit.
 
-# In[ ]:
+# In[26]:
 
 
 # Plot the linear fit
@@ -702,7 +724,7 @@ plt.xlabel('Population of City in 10,000s')
 # - Similarly, 70,000 people can be translated into an input to the model as `np.array([7.])`
 # 
 
-# In[ ]:
+# In[27]:
 
 
 predict1 = 3.5 * w + b
