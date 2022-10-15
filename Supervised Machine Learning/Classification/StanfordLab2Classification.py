@@ -1,42 +1,66 @@
 import numpy as np
 
 import matplotlib.pyplot as plt
-from lab_utils_common import dlc, plot_data
 from plt_one_addpt_onclick import plt_one_addpt_onclick
+from lab_utils_common import draw_vthresh
 plt.style.use('./deeplearning.mplstyle')
+
+# Input is an array. 
+input_array = np.array([1,2,3])
+exp_array = np.exp(input_array)
+
+print("Input to exp:", input_array)
+print("Output of exp:", exp_array)
+
+# Input is a single number
+input_val = 1  
+exp_val = np.exp(input_val)
+
+print("Input to exp:", input_val)
+print("Output of exp:", exp_val)
+
+def sigmoid(z):
+    """
+    Compute the sigmoid of z
+
+    Args:
+        z (ndarray): A scalar, numpy array of any size.
+
+    Returns:
+        g (ndarray): sigmoid(z), with the same shape as z
+         
+    """
+
+    g = 1/(1+np.exp(-z))
+   
+    return g
+
+    # Generate an array of evenly spaced values between -10 and 10
+z_tmp = np.arange(-10,11)
+
+# Use the function implemented above to get the sigmoid values
+y = sigmoid(z_tmp)
+
+# Code for pretty printing the two arrays next to each other
+np.set_printoptions(precision=3) 
+print("Input (z), Output (sigmoid(z))")
+print(np.c_[z_tmp, y])
+
+# Plot z vs sigmoid(z)
+fig,ax = plt.subplots(1,1,figsize=(5,3))
+ax.plot(z_tmp, y, c="b")
+
+ax.set_title("Sigmoid function")
+ax.set_ylabel('sigmoid(z)')
+ax.set_xlabel('z')
+draw_vthresh(ax,0)
 
 x_train = np.array([0., 1, 2, 3, 4, 5])
 y_train = np.array([0,  0, 0, 1, 1, 1])
-X_train2 = np.array([[0.5, 1.5], [1,1], [1.5, 0.5], [3, 0.5], [2, 2], [1, 2.5]])
-y_train2 = np.array([0, 0, 0, 1, 1, 1])
-
-pos = y_train == 1
-neg = y_train == 0
-
-fig,ax = plt.subplots(1,2,figsize=(8,3))
-#plot 1, single variable
-ax[0].scatter(x_train[pos], y_train[pos], marker='x', s=80, c = 'red', label="y=1")
-ax[0].scatter(x_train[neg], y_train[neg], marker='o', s=100, label="y=0", facecolors='none', 
-              edgecolors=dlc["dlblue"],lw=3)
-
-ax[0].set_ylim(-0.08,1.1)
-ax[0].set_ylabel('y', fontsize=12)
-ax[0].set_xlabel('x', fontsize=12)
-ax[0].set_title('one variable plot')
-ax[0].legend()
-
-#plot 2, two variables
-plot_data(X_train2, y_train2, ax[1])
-ax[1].axis([0, 4, 0, 4])
-ax[1].set_ylabel('$x_1$', fontsize=12)
-ax[1].set_xlabel('$x_0$', fontsize=12)
-ax[1].set_title('two variable plot')
-ax[1].legend()
-plt.tight_layout()
-plt.show()
 
 w_in = np.zeros((1))
 b_in = 0
+
 plt.close('all') 
-addpt = plt_one_addpt_onclick( x_train,y_train, w_in, b_in, logistic=False)
+addpt = plt_one_addpt_onclick( x_train,y_train, w_in, b_in, logistic=True)
 
