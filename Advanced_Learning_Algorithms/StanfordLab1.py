@@ -8,7 +8,7 @@ from tensorflow.python.keras.losses import MeanSquaredError, BinaryCrossentropy
 from tensorflow.python.keras.activations import sigmoid
 from lab_utils_common import dlc
 from lab_neurons_utils import plt_prob_1d, sigmoidnp, plt_linear, plt_logistic
-plt.style.use('./deeplearning.mplstyle')
+plt.style.use('deeplearning.mplstyle')
 import logging
 logging.getLogger("tensorflow").setLevel(logging.ERROR)
 tf.autograph.set_verbosity(0)
@@ -95,4 +95,23 @@ alog = sigmoidnp(np.dot(set_w,X_train[0].reshape(1,1)) + set_b)
 print(alog)
 
 plt_logistic(X_train, Y_train, model, set_w, set_b, pos, neg)
+
+logistic_layer = model.get_layer('L1')
+w,b = logistic_layer.get_weights()
+print(w,b)
+print(w.shape,b.shape)
+
+set_w = np.array([[2]])
+set_b = np.array([-4.5])
+# set_weights takes a list of numpy arrays
+logistic_layer.set_weights([set_w, set_b])
+print(logistic_layer.get_weights())
+
+a1 = model.predict(X_train[0].reshape(1,1))
+print(a1)
+alog = sigmoidnp(np.dot(set_w,X_train[0].reshape(1,1)) + set_b)
+print(alog)
+
+plt_logistic(X_train, Y_train, model, set_w, set_b, pos, neg)
+
 
